@@ -1,62 +1,68 @@
 [
   {
-    "subject": "Utworzenie strony głównej",
-    "description": "# Utworzenie strony głównej\n\n## Opis\nStworzenie nowoczesnej i responsywnej strony głównej dla aplikacji webowej.\n\n## Wymagania\n- [ ] Responsywny design\n- [ ] Obsługa różnych rozmiarów ekranów\n- [ ] Szybkie ładowanie (< 3s)\n- [ ] SEO-friendly\n\n## Kryteria akceptacji\n- [ ] Strona ładuje się na wszystkich urządzeniach\n- [ ] Prędkość ładowania < 3 sekundy\n- [ ] Wszystkie linki działają poprawnie\n- [ ] Design jest zgodny z mockupami\n\n## Uwagi techniczne\nUżyj HTML5, CSS3 i JavaScript. Zoptymalizuj obrazy i CSS.\n\n## Szacowany czas\n8 godzin",
-    "tracker_id": 1,
-    "priority_id": 2,
-    "estimated_hours": 8,
-    "category_id": 1,
-    "fixed_version_id": 1,
-    "assigned_to_id": 1
+    "issue": {
+      "subject": "Design and implement user interface",
+      "description": "## Description\nCreate a modern, responsive user interface for the web application.\n\n## Requirements\n- [ ] Design is consistent with mockups\n- [ ] Interface is responsive\n- [ ] Accessibility standards are met\n- [ ] Cross-browser compatibility\n\n## Technical Notes\nUse HTML5, CSS3 and JavaScript. Optimize images and CSS.\n\n## Estimated Time\n8 hours",
+      "tracker_id": 1,
+      "status_id": 1,
+      "priority_id": 2,
+      "assigned_to_id": 1,
+      "estimated_hours": 8
+    }
   },
   {
-    "subject": "Implementacja systemu logowania",
-    "description": "# Implementacja systemu logowania\n\n## Opis\nStworzenie bezpiecznego systemu uwierzytelniania użytkowników.\n\n## Wymagania\n- [ ] Formularz logowania\n- [ ] Walidacja danych\n- [ ] Szyfrowanie haseł\n- [ ] Sesje użytkowników\n- [ ] Resetowanie hasła\n\n## Kryteria akceptacji\n- [ ] Użytkownik może się zalogować\n- [ ] Hasła są szyfrowane\n- [ ] Sesje są bezpieczne\n- [ ] Resetowanie hasła działa\n\n## Uwagi techniczne\nUżyj bcrypt do szyfrowania haseł. Implementuj JWT dla sesji.\n\n## Szacowany czas\n12 godzin",
-    "tracker_id": 1,
-    "priority_id": 1,
-    "estimated_hours": 12,
-    "category_id": 1,
-    "fixed_version_id": 1,
-    "assigned_to_id": 1
+    "issue": {
+      "subject": "Implement user authentication system",
+      "description": "## Description\nCreate a secure user authentication and authorization system.\n\n## Requirements\n- [ ] User registration works\n- [ ] User login works\n- [ ] Password reset works\n- [ ] Session management works\n\n## Technical Notes\nUse bcrypt for password encryption. Implement JWT for sessions.\n\n## Estimated Time\n12 hours",
+      "tracker_id": 1,
+      "status_id": 1,
+      "priority_id": 2,
+      "assigned_to_id": 1,
+      "estimated_hours": 12
+    }
   },
   {
-    "subject": "Napraw błędu 404 na stronie kontaktowej",
-    "description": "# Napraw błędu 404 na stronie kontaktowej\n\n## Opis\nUżytkownicy otrzymują błąd 404 przy próbie dostępu do strony kontaktowej.\n\n## Kroki do reprodukcji\n1. Przejdź do /contact\n2. Otrzymasz błąd 404\n\n## Oczekiwane zachowanie\nStrona kontaktowa powinna się wyświetlić poprawnie.\n\n## Uwagi techniczne\nSprawdź routing w aplikacji. Prawdopodobnie brakuje mapowania URL.\n\n## Szacowany czas\n2 godziny",
-    "tracker_id": 2,
-    "priority_id": 3,
-    "estimated_hours": 2,
-    "category_id": 2,
-    "fixed_version_id": 1,
-    "assigned_to_id": 1
+    "issue": {
+      "subject": "Fix 404 error on main page",
+      "description": "## Description\nUsers are getting 404 errors when accessing the main page.\n\n## Requirements\n- [ ] Main page loads correctly\n- [ ] No 404 errors\n- [ ] Proper routing is implemented\n\n## Technical Notes\nCheck routing in the application. URL mapping is probably missing.\n\n## Estimated Time\n2 hours",
+      "tracker_id": 2,
+      "status_id": 1,
+      "priority_id": 3,
+      "assigned_to_id": 1,
+      "estimated_hours": 2
+    }
   },
   {
-    "subject": "Dodanie dokumentacji API",
-    "description": "# Dodanie dokumentacji API\n\n## Opis\nStworzenie kompletnej dokumentacji dla wszystkich endpointów API.\n\n## Wymagania\n- [ ] Opis wszystkich endpointów\n- [ ] Przykłady użycia\n- [ ] Kody błędów\n- [ ] Schematy danych\n\n## Kryteria akceptacji\n- [ ] Dokumentacja jest kompletna\n- [ ] Przykłady działają\n- [ ] Jest czytelna dla deweloperów\n\n## Uwagi techniczne\nUżyj Swagger/OpenAPI do generowania dokumentacji.\n\n## Szacowany czas\n6 godzin",
-    "tracker_id": 4,
-    "priority_id": 2,
-    "estimated_hours": 6,
-    "category_id": 4,
-    "fixed_version_id": 2,
-    "assigned_to_id": 1
+    "issue": {
+      "subject": "Create API documentation",
+      "description": "## Description\nGenerate comprehensive API documentation for developers.\n\n## Requirements\n- [ ] All endpoints are documented\n- [ ] Examples are provided\n- [ ] Error codes are explained\n- [ ] Is readable for developers\n\n## Technical Notes\nUse Swagger/OpenAPI to generate documentation.\n\n## Estimated Time\n6 hours",
+      "tracker_id": 3,
+      "status_id": 1,
+      "priority_id": 2,
+      "assigned_to_id": 1,
+      "estimated_hours": 6
+    }
   },
   {
-    "subject": "Optymalizacja bazy danych",
-    "description": "# Optymalizacja bazy danych\n\n## Opis\nPoprawa wydajności zapytań SQL i indeksów w bazie danych.\n\n## Wymagania\n- [ ] Analiza wolnych zapytań\n- [ ] Dodanie brakujących indeksów\n- [ ] Optymalizacja zapytań\n- [ ] Monitoring wydajności\n\n## Kryteria akceptacji\n- [ ] Czas odpowiedzi < 100ms\n- [ ] Wszystkie zapytania są zoptymalizowane\n- [ ] Dodano odpowiednie indeksy\n\n## Uwagi techniczne\nUżyj EXPLAIN PLAN do analizy zapytań. Dodaj indeksy dla często używanych kolumn.\n\n## Szacowany czas\n10 godzin",
-    "tracker_id": 1,
-    "priority_id": 2,
-    "estimated_hours": 10,
-    "category_id": 1,
-    "fixed_version_id": 2,
-    "assigned_to_id": 1
+    "issue": {
+      "subject": "Optimize database queries",
+      "description": "## Description\nImprove database performance by optimizing slow queries.\n\n## Requirements\n- [ ] Query execution time is reduced\n- [ ] Database load is decreased\n- [ ] Appropriate indexes are added\n- [ ] Query plans are optimized\n\n## Technical Notes\nUse EXPLAIN PLAN to analyze queries. Add indexes for frequently used columns.\n\n## Estimated Time\n10 hours",
+      "tracker_id": 1,
+      "status_id": 1,
+      "priority_id": 2,
+      "assigned_to_id": 1,
+      "estimated_hours": 10
+    }
   },
   {
-    "subject": "Testowanie responsywności",
-    "description": "# Testowanie responsywności\n\n## Opis\nPrzetestowanie aplikacji na różnych urządzeniach i rozdzielczościach.\n\n## Wymagania\n- [ ] Test na urządzeniach mobilnych\n- [ ] Test na tabletach\n- [ ] Test na różnych przeglądarkach\n- [ ] Test na różnych rozdzielczościach\n\n## Kryteria akceptacji\n- [ ] Aplikacja działa na wszystkich urządzeniach\n- [ ] Layout jest poprawny\n- [ ] Funkcjonalność jest dostępna\n\n## Uwagi techniczne\nUżyj narzędzi deweloperskich przeglądarki do testowania różnych rozdzielczości.\n\n## Szacowany czas\n4 godziny",
-    "tracker_id": 3,
-    "priority_id": 2,
-    "estimated_hours": 4,
-    "category_id": 3,
-    "fixed_version_id": 2,
-    "assigned_to_id": 1
+    "issue": {
+      "subject": "Implement responsive design",
+      "description": "## Description\nEnsure the application works well on all device sizes.\n\n## Requirements\n- [ ] Mobile devices are supported\n- [ ] Tablet layout is correct\n- [ ] Desktop layout is correct\n- [ ] Functionality is available\n\n## Technical Notes\nUse browser developer tools to test different resolutions.\n\n## Estimated Time\n4 hours",
+      "tracker_id": 1,
+      "status_id": 1,
+      "priority_id": 2,
+      "assigned_to_id": 1,
+      "estimated_hours": 4
+    }
   }
 ]

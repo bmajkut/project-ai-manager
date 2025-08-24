@@ -6,299 +6,234 @@
 
 This document contains internal notes, development proposals, and technical decisions for Project AI Manager.
 
-## Analiza pomysłu
+## Idea Analysis
 
-Twój pomysł na Redmine AI Assistant jest bardzo dobrze przemyślany i ma duży potencjał. Oto moja analiza:
+### Core Concept
+**Project AI Manager** is an intelligent project management system that leverages Cursor AI to automate and streamline project workflows across multiple platforms. The system uses shell scripts and REST APIs to perform CRUD operations on tasks and other data, based on rules defined in markdown files.
 
-### ✅ Mocne strony
-- **Bezpieczeństwo** - zakaz usuwania zadań i obowiązkowy changelog
-- **Modułowość** - jasno podzielona architektura
-- **Automatyzacja** - pełny workflow od analizy do implementacji
-- **Integracja z Cursor AI** - wykorzystanie potencjału AI do zarządzania projektami
+### Key Components
+- **Cursor AI**: Primary AI agent for project management assistance
+- **Cross-Platform Scripts**: PowerShell (Windows) and Bash (Linux/macOS)
+- **REST API Integration**: Redmine, with plans for Jira, Azure DevOps
+- **Markdown Rules**: Configuration and operational rules
+- **JSON Configuration**: Project-specific settings and data exchange
 
-### 🔧 Obszary do rozwoju
-- **Skalowalność** - obsługa wielu projektów jednocześnie
-- **Monitoring** - dashboard i metryki
-- **CI/CD** - integracja z systemami automatyzacji
-- **Backup i recovery** - strategie bezpieczeństwa danych
+## Technical Architecture
 
-## Moje propozycje ulepszeń
-
-### 1. Architektura systemu
-
-**Obecna struktura:**
+### Directory Structure
 ```
-core/ + projects/
-```
-
-**Proponowana rozszerzona struktura:**
-```
-core/
-├── api/           # Moduły API dla różnych wersji Redmine
-├── scripts/       # Skrypty PowerShell/Batch
-├── rules/         # Reguły dla Cursor AI
-├── templates/     # Szablony projektów
-├── plugins/       # System pluginów
-├── monitoring/    # Dashboard i metryki
-└── backup/        # System backup i recovery
-
-projects/
-├── active/        # Aktywne projekty
-├── archived/      # Zarchiwizowane projekty
-└── templates/     # Szablony projektów użytkownika
-
-shared/
-├── libraries/     # Współdzielone biblioteki
-├── configs/       # Globalne konfiguracje
-└── logs/          # Centralne logi
+project-ai-manager/
+├── core/                          # Core system components
+│   ├── rules/                     # AI operational rules
+│   ├── scripts/                   # Cross-platform scripts
+│   │   ├── windows/              # Windows (PowerShell) scripts
+│   │   ├── linux/                # Linux/macOS (Bash) scripts
+│   │   └── script-manager.ps1    # Cross-platform script manager
+│   └── templates/                 # Project templates
+├── projects/                      # Individual project directories
+│   └── example-01/               # Learning project example
+└── docs/                          # Documentation
 ```
 
-### 2. System pluginów
+### Script Architecture
+- **script-manager.ps1**: Cross-platform router (PowerShell)
+- **windows/redmine-api.ps1**: Windows Redmine API router
+- **linux/redmine-api.sh**: Linux/macOS Redmine API script
+- **Versioned scripts**: Separate scripts for Redmine 3.4, 4.2, 5.0+
 
-**Architektura pluginów:**
-```json
-{
-  "plugin_name": "redmine-git-integration",
-  "version": "1.0.0",
-  "description": "Integracja z Git",
-  "hooks": ["pre-issue-create", "post-issue-update"],
-  "config": {
-    "git_repo_path": "",
-    "branch_pattern": "feature/{issue_id}"
-  }
+## Development Phases
+
+### Phase 1: Core System (Completed)
+- ✅ Cross-platform script management
+- ✅ Redmine API integration
+- ✅ Basic project structure
+- ✅ Documentation framework
+
+### Phase 2: Advanced Features (In Progress)
+- 🔄 Per-project rules and exceptions
+- 🔄 Learning mode for safe experimentation
+- 🔄 Enhanced error handling
+- 🔄 Comprehensive logging
+
+### Phase 3: Future Enhancements (Planned)
+- 📋 Multi-platform support (Jira, Azure DevOps)
+- 📋 Plugin system for extensibility
+- 📋 Web interface for non-technical users
+- 📋 Advanced analytics and reporting
+
+## Technical Decisions
+
+### Cross-Platform Strategy
+**Decision**: Use PowerShell as primary router with platform-specific script execution
+**Rationale**: 
+- PowerShell available on all modern Windows systems
+- Can invoke Bash scripts on Linux/macOS
+- Maintains consistent interface across platforms
+- Leverages existing PowerShell expertise
+
+### Script Versioning
+**Decision**: Separate scripts for different Redmine API versions
+**Rationale**:
+- API compatibility varies between versions
+- Different feature sets and limitations
+- Easier maintenance and testing
+- Clear upgrade path for users
+
+### Configuration Management
+**Decision**: JSON-based configuration with markdown rules
+**Rationale**:
+- JSON is cross-platform and human-readable
+- Markdown provides rich text formatting
+- Easy to version control
+- Familiar to developers
+
+## Implementation Details
+
+### OS Detection
+```powershell
+function Get-OperatingSystem {
+    if ($IsWindows -or $env:OS -eq "Windows_NT") {
+        return "Windows"
+    }
+    elseif ($IsLinux) {
+        return "Linux"
+    }
+    elseif ($IsMacOS) {
+        return "macOS"
+    }
+    # Fallback detection...
 }
 ```
 
-**Przykłady pluginów:**
-- **Git Integration** - automatyczne tworzenie branchy dla zadań
-- **Time Tracking** - integracja z systemami śledzenia czasu
-- **Notifications** - powiadomienia email/Slack
-- **Reporting** - generowanie raportów PDF/Excel
-- **Import/Export** - migracja z innych systemów
-
-### 3. Zaawansowane funkcjonalności
-
-#### Dashboard i monitoring
-```markdown
-## Dashboard projektu
-- Postęp realizacji zadań
-- Metryki wydajności
-- Alerty o problemach
-- Wykresy burndown/burnup
-- Raporty czasowe
-```
-
-#### System backup i recovery
-```markdown
-## Strategia backup
-- Automatyczne backupy przed zmianami
-- Backup całych projektów
-- Point-in-time recovery
-- Szyfrowanie backupów
-- Rotacja backupów (7 dni, 4 tygodnie, 12 miesięcy)
-```
-
-#### Integracja CI/CD
-```markdown
-## CI/CD Pipeline
-- Automatyczne tworzenie zadań z commitów
-- Linkowanie zadań z pull requestami
-- Automatyczne aktualizacje statusów
-- Deployment tracking
-```
-
-### 4. Bezpieczeństwo i audyt
-
-#### Rozszerzone reguły bezpieczeństwa
-```markdown
-## Dodatkowe reguły
-- **4-eyes principle** - wymagane zatwierdzenie dla krytycznych zmian
-- **Role-based access** - różne poziomy uprawnień
-- **Audit trail** - pełna historia wszystkich operacji
-- **Encryption at rest** - szyfrowanie wrażliwych danych
-- **API rate limiting** - ochrona przed nadużyciami
-```
-
-#### System uprawnień
-```json
-{
-  "roles": {
-    "viewer": ["read:projects", "read:issues"],
-    "developer": ["read:projects", "read:issues", "create:issues", "update:issues"],
-    "manager": ["read:projects", "read:issues", "create:issues", "update:issues", "create:versions"],
-    "admin": ["*"]
-  }
+### Script Routing
+```powershell
+function Invoke-PlatformScript {
+    param([string]$OS, [string]$ScriptPath, [hashtable]$Parameters)
+    
+    switch ($OS) {
+        "Windows" { & $ScriptPath @Parameters }
+        "Linux" { bash $ScriptPath @Parameters }
+        "macOS" { bash $ScriptPath @Parameters }
+    }
 }
 ```
 
-### 5. Skalowalność i wydajność
-
-#### Obsługa wielu projektów
-```markdown
-## Multi-project management
-- Centralne zarządzanie wszystkimi projektami
-- Cross-project dependencies
-- Shared resources and templates
-- Bulk operations
-- Project templates and cloning
+### Version Mapping
+```powershell
+function Map-VersionToDirectory {
+    param([string]$Version)
+    
+    if ($Version -match "^5\.") { return "v5.0" }
+    elseif ($Version -match "^4\.") { return "v4.2" }
+    elseif ($Version -match "^3\.") { return "v3.4" }
+    else { return "v5.0" } # Default
+}
 ```
 
-#### Performance optimization
-```markdown
-## Optymalizacja wydajności
-- Caching API responses
-- Batch operations
-- Async processing
-- Connection pooling
-- Rate limiting per project
-```
+## Security Considerations
 
-### 6. User Experience
+### API Key Management
+- Never log sensitive credentials
+- Use environment variables when possible
+- Implement key rotation mechanisms
+- Secure storage for production environments
 
-#### Interaktywny wizard
-```markdown
-## Setup wizard
-1. **Project type selection** - Web app, Mobile app, API, etc.
-2. **Redmine configuration** - URL, API key, project ID
-3. **Template selection** - Agile, Waterfall, Kanban
-4. **Customization** - fields, workflows, notifications
-5. **Validation** - test connection, verify permissions
-6. **Confirmation** - review and create
-```
+### Data Validation
+- Validate all user inputs
+- Sanitize data before API calls
+- Implement rate limiting
+- Log all operations for audit
 
-#### Web interface (opcjonalnie)
-```markdown
-## Web dashboard
-- React/Vue.js frontend
-- Real-time updates
-- Drag & drop task management
-- Rich text editor for descriptions
-- File attachments
-- Search and filtering
-```
+### Access Control
+- Project-level permissions
+- User role management
+- API endpoint restrictions
+- Audit trail maintenance
 
-## Strategia rozwoju
+## Testing Strategy
 
-### Faza 1: MVP (1-2 miesiące)
-- [x] Podstawowa struktura katalogów
-- [x] Skrypty PowerShell
-- [x] Reguły dla Cursor AI
-- [x] Szablony projektów
-- [ ] Testy z rzeczywistym Redmine
-- [ ] Dokumentacja użytkownika
+### Unit Testing
+- Individual script functions
+- Configuration validation
+- Error handling scenarios
+- Cross-platform compatibility
 
-### Faza 2: Rozszerzenia (2-3 miesiące)
-- [ ] System pluginów
-- [ ] Zaawansowane reguły bezpieczeństwa
-- [ ] Monitoring i dashboard
-- [ ] Backup i recovery
-- [ ] Multi-project support
+### Integration Testing
+- End-to-end workflows
+- API interaction testing
+- Cross-platform script execution
+- Error recovery scenarios
 
-### Faza 3: Enterprise features (3-6 miesięcy)
-- [ ] Web interface
-- [ ] CI/CD integration
-- [ ] Advanced reporting
-- [ ] Role-based access control
-- [ ] API rate limiting
+### User Acceptance Testing
+- Learning project scenarios
+- Real-world use cases
+- Performance testing
+- Security validation
 
-### Faza 4: Cloud i SaaS (6+ miesięcy)
-- [ ] Cloud deployment
-- [ ] Multi-tenant architecture
-- [ ] API for third-party integrations
-- [ ] Marketplace for plugins
-- [ ] Professional support
+## Deployment Strategy
 
-## Technologie do rozważenia
+### Development Environment
+- Local development with Docker
+- Example project for testing
+- Continuous integration setup
+- Automated testing pipeline
 
-### Backend
-- **PowerShell** - obecnie, dobre dla Windows
-- **Python** - alternatywa cross-platform
-- **Node.js** - jeśli planujesz web interface
-- **Go** - dla wydajności i cross-platform
+### Production Deployment
+- Script distribution via GitHub
+- Documentation and examples
+- User training materials
+- Support and maintenance
 
-### Frontend (opcjonalnie)
-- **React** - popularny, dużo komponentów
-- **Vue.js** - prostszy, łatwiejszy w nauce
-- **Svelte** - nowoczesny, wydajny
+## Future Roadmap
 
-### Database
-- **SQLite** - dla lokalnych projektów
-- **PostgreSQL** - dla większych instalacji
-- **MongoDB** - dla dokumentów i konfiguracji
+### Short Term (3-6 months)
+- Enhanced error handling
+- Additional Redmine versions
+- Improved documentation
+- User feedback integration
 
-### Deployment
-- **Docker** - konteneryzacja
-- **GitHub Actions** - CI/CD
-- **Azure DevOps** - enterprise CI/CD
-- **Jenkins** - self-hosted CI/CD
+### Medium Term (6-12 months)
+- Jira integration
+- Azure DevOps support
+- Web interface prototype
+- Plugin architecture
 
-## Rekomendacje dotyczące repozytoriów
+### Long Term (12+ months)
+- Enterprise features
+- Advanced analytics
+- Machine learning integration
+- Community ecosystem
 
-### Opcja 3: GitHub Releases + Artefakty ✅
+## Risk Assessment
 
-**Zalety:**
-- Łatwiejsze zarządzanie jednym repo
-- Automatyczne tworzenie release'ów
-- Możliwość ukrycia prywatnych notatek
-- CI/CD pipeline dla automatycznych release'ów
+### Technical Risks
+- **API changes**: Redmine API evolution
+- **Platform dependencies**: OS-specific requirements
+- **Performance**: Large project handling
+- **Security**: API key exposure
 
-**Implementacja:**
-```yaml
-# .github/workflows/release.yml
-name: Create Release
-on:
-  push:
-    tags:
-      - 'v*'
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release:
-            ${{ github.event.head_commit.message }}
-          draft: false
-          prerelease: false
-```
+### Mitigation Strategies
+- **Version compatibility**: Maintain multiple API versions
+- **Cross-platform**: Test on all target platforms
+- **Performance**: Implement caching and optimization
+- **Security**: Follow security best practices
 
-**Struktura plików:**
-```
-redmine-ai/
-├── .github/workflows/     # CI/CD
-├── core/                  # Kod źródłowy
-├── projects/              # Projekty (w .gitignore)
-├── private/               # Prywatne notatki (w .gitignore)
-├── docs/                  # Dokumentacja publiczna
-├── examples/              # Przykłady użycia
-└── releases/              # Artefakty release'ów
-```
+## Success Metrics
 
-## Uwagi końcowe
+### Technical Metrics
+- Script execution success rate
+- Cross-platform compatibility
+- API response times
+- Error handling effectiveness
 
-### Co już masz świetnie zrobione:
-1. **Bezpieczeństwo** - reguły są bardzo rozsądne
-2. **Architektura** - modułowa i skalowalna
-3. **Workflow** - logiczny i kompletny
-4. **Integracja z Cursor AI** - innowacyjne podejście
+### User Metrics
+- User adoption rate
+- Feature usage statistics
+- Support request volume
+- Community contribution
 
-### Co warto rozważyć:
-1. **Cross-platform support** - nie tylko Windows
-2. **Plugin ecosystem** - dla rozszerzalności
-3. **Web interface** - dla lepszego UX
-4. **Enterprise features** - dla większych organizacji
+## Conclusion
 
-### Następne kroki:
-1. **Prototyp** - przetestuj z rzeczywistym Redmine
-2. **Feedback** - zbierz opinie użytkowników
-3. **Iteracja** - rozwijaj na podstawie feedbacku
-4. **Community** - buduj społeczność użytkowników
+Your idea has great potential and could become a standard in AI-driven project management across multiple platforms. The cross-platform approach and modular architecture provide a solid foundation for future growth.
 
-Twój pomysł ma duży potencjał i może stać się standardem w zarządzaniu projektami Redmine z AI. Powodzenia w rozwoju! 🚀
+Good luck with development! 🚀

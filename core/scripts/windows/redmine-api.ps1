@@ -10,14 +10,14 @@ param(
     [Parameter(Mandatory=$false)]
     [string]$ConfigFile = "project-config.json",
     
-    [Parameter(Mutable=$false)]
+    [Parameter(Mandatory=$false)]
     [string]$DataFile = "",
     
-    [Parameter(Mutable=$false)]
+    [Parameter(Mandatory=$false)]
     [string]$OutputFile = ""
 )
 
-# Funkcja do logowania
+# Function for logging
 function Write-Log {
     param(
         [string]$Message,
@@ -26,59 +26,63 @@ function Write-Log {
     
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     $logMessage = "[$timestamp] [$Level] $Message"
-    Write-Host $logMessage
+    
+    switch ($Level) {
+        "ERROR" { Write-Host $logMessage -ForegroundColor Red }
+        "WARNING" { Write-Host $logMessage -ForegroundColor Yellow }
+        "SUCCESS" { Write-Host $logMessage -ForegroundColor Green }
+        default { Write-Host $logMessage -ForegroundColor White }
+    }
 }
 
-# Funkcja do wczytywania konfiguracji
+# Function to load configuration
 function Load-Config {
     param([string]$ConfigPath)
     
+    if (!(Test-Path $ConfigPath)) {
+        throw "Configuration file not found: $ConfigPath"
+    }
+    
     try {
-        if (!(Test-Path $ConfigPath)) {
-            throw "Plik konfiguracyjny nie istnieje: $ConfigPath"
-        }
-        
-        $config = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
-        Write-Log "Konfiguracja załadowana z: $ConfigPath"
+        $config = Get-Content $ConfigPath | ConvertFrom-Json
         return $config
     }
     catch {
-        Write-Log "Błąd podczas ładowania konfiguracji: $($_.Exception.Message)" "ERROR"
-        exit 1
+        throw "Failed to parse configuration file: $($_.Exception.Message)"
     }
 }
 
-# Funkcja do określania wersji Redmine
+# Function to determine Redmine version
 function Get-RedmineVersion {
-    param($Config)
+    param([object]$Config)
     
-    $version = $Config.redmine_config.version
-    if (!$version) {
-        Write-Log "Brak wersji w konfiguracji, używam domyślnej v5.0" "WARNING"
-        return "5.0"
+    if ($Config.redmine_config.version) {
+        return $Config.redmine_config.version
     }
     
-    return $version
+    Write-Log "No version in configuration, using default v5.0" "WARNING"
+    return "5.0"
 }
 
-# Funkcja do mapowania wersji na katalog
+# Function to map version to directory
 function Map-VersionToDirectory {
     param([string]$Version)
     
-    $majorVersion = [version]::Parse($Version)
-    
-    if ($majorVersion.Major -ge 5) {
+    if ($Version -match "^5\.") {
         return "v5.0"
     }
-    elseif ($majorVersion.Major -eq 4) {
+    elseif ($Version -match "^4\.") {
         return "v4.2"
     }
-    else {
+    elseif ($Version -match "^3\.") {
         return "v3.4"
+    }
+    else {
+        return "v5.0"  # Default
     }
 }
 
-# Funkcja do uruchamiania odpowiedniego skryptu
+# Function to run appropriate script
 function Invoke-RedmineScript {
     param(
         [string]$VersionDir,
@@ -88,15 +92,14 @@ function Invoke-RedmineScript {
         [string]$OutputFile
     )
     
-    $scriptPath = Join-Path $PSScriptRoot "redmine\$VersionDir\redmine-api.ps1"
+    $scriptPath = Join-Path $PSScriptRoot $VersionDir "redmine-api.ps1"
     
     if (!(Test-Path $scriptPath)) {
-        throw "Skrypt dla wersji $VersionDir nie istnieje: $scriptPath"
+        throw "Script for version $VersionDir does not exist: $scriptPath"
     }
     
-    Write-Log "Uruchamiam skrypt dla wersji $VersionDir"
+    Write-Log "Starting script for version $VersionDir"
     
-    # Buduj parametry
     $params = @{
         Action = $Action
         ConfigFile = $ConfigFile
@@ -110,31 +113,29 @@ function Invoke-RedmineScript {
         $params.OutputFile = $OutputFile
     }
     
-    # Uruchom skrypt
     & $scriptPath @params
 }
 
-# Główna logika
+# Main execution
 try {
-    Write-Log "Rozpoczynam Redmine API Router"
+    Write-Log "Redmine API Router started"
     
-    # Wczytaj konfigurację
+    # Load configuration
     $config = Load-Config -ConfigPath $ConfigFile
     
-    # Określ wersję Redmine
+    # Get Redmine version
     $redmineVersion = Get-RedmineVersion -Config $config
-    Write-Log "Wykryta wersja Redmine: $redmineVersion"
+    Write-Log "Detected Redmine version: $redmineVersion"
     
-    # Mapuj wersję na katalog
+    # Map to directory
     $versionDir = Map-VersionToDirectory -Version $redmineVersion
-    Write-Log "Używam skryptu z katalogu: $versionDir"
     
-    # Uruchom odpowiedni skrypt
+    # Execute appropriate script
     Invoke-RedmineScript -VersionDir $versionDir -Action $Action -ConfigFile $ConfigFile -DataFile $DataFile -OutputFile $OutputFile
     
-    Write-Log "Router zakończony pomyślnie"
+    Write-Log "Router completed successfully"
 }
 catch {
-    Write-Log "Błąd krytyczny: $($_.Exception.Message)" "CRITICAL"
+    Write-Log "Critical error: $($_.Exception.Message)" "ERROR"
     exit 1
 }

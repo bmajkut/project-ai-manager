@@ -17,7 +17,7 @@ param(
     [string]$OutputFile = ""
 )
 
-# Funkcja do logowania
+# Function for logging
 function Write-Log {
     param(
         [string]$Message,
@@ -27,313 +27,325 @@ function Write-Log {
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     $logMessage = "[$timestamp] [$Level] $Message"
     
-    Write-Host $logMessage
-    
-    # Zapisz do pliku logów
-    $logFile = "logs\operations.log"
-    if (!(Test-Path "logs")) {
-        New-Item -ItemType Directory -Path "logs" -Force | Out-Null
+    switch ($Level) {
+        "ERROR" { Write-Host $logMessage -ForegroundColor Red }
+        "WARNING" { Write-Host $logMessage -ForegroundColor Yellow }
+        "SUCCESS" { Write-Host $logMessage -ForegroundColor Green }
+        default { Write-Host $logMessage -ForegroundColor White }
     }
-    Add-Content -Path $logFile -Value $logMessage
 }
 
-# Funkcja do wczytywania konfiguracji
+# Function to load configuration
 function Load-Config {
     param([string]$ConfigPath)
     
+    if (!(Test-Path $ConfigPath)) {
+        throw "Configuration file not found: $ConfigPath"
+    }
+    
     try {
-        if (!(Test-Path $ConfigPath)) {
-            throw "Plik konfiguracyjny nie istnieje: $ConfigPath"
-        }
-        
-        $config = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
-        Write-Log "Konfiguracja załadowana z: $ConfigPath"
+        $config = Get-Content $ConfigPath | ConvertFrom-Json
         return $config
     }
     catch {
-        Write-Log "Błąd podczas ładowania konfiguracji: $($_.Exception.Message)" "ERROR"
-        exit 1
+        throw "Failed to parse configuration file: $($_.Exception.Message)"
     }
 }
 
-# Funkcja do walidacji konfiguracji
-function Test-Config {
-    param($Config)
+# Function to validate configuration
+function Validate-Config {
+    param([object]$Config)
     
-    $required = @("redmine_config", "project_info")
-    foreach ($field in $required) {
-        if (!$Config.$field) {
-            throw "Brak wymaganego pola w konfiguracji: $field"
-        }
+    if (!$Config.redmine_config.url) {
+        throw "Redmine URL is required in configuration"
     }
     
-    $redmine = $Config.redmine_config
-    if (!$redmine.url -or !$redmine.api_key -or !$redmine.project_id) {
-        throw "Niekompletna konfiguracja Redmine"
+    if (!$Config.redmine_config.api_key) {
+        throw "API key is required in configuration"
     }
     
-    Write-Log "Konfiguracja zwalidowana pomyślnie"
+    if (!$Config.redmine_config.project_id) {
+        throw "Project ID is required in configuration"
+    }
+    
+    Write-Log "Configuration validated successfully"
 }
 
-# Funkcja do wykonywania zapytań API (Redmine 4.2 compatible)
+# Function to execute API calls
 function Invoke-RedmineAPI {
     param(
         [string]$Method,
         [string]$Endpoint,
-        [string]$Body = "",
-        [hashtable]$Headers = @{}
+        [object]$Body = $null,
+        [object]$Config
     )
     
-    $config = $script:Config
-    $baseUrl = $config.redmine_config.url.TrimEnd('/')
-    $apiKey = $config.redmine_config.api_key
-    
-    $uri = "$baseUrl$Endpoint"
-    
-    # Domyślne nagłówki dla Redmine 4.2
-    $defaultHeaders = @{
-        "X-Redmine-API-Key" = $apiKey
+    $headers = @{
+        "X-Redmine-API-Key" = $Config.redmine_config.api_key
         "Content-Type" = "application/json"
-        "Accept" = "application/json"
     }
     
-    # Połącz nagłówki
-    $allHeaders = $defaultHeaders + $Headers
+    $uri = "$($Config.redmine_config.url)$Endpoint"
     
     try {
-        $params = @{
-            Uri = $uri
-            Method = $Method
-            Headers = $allHeaders
-            TimeoutSec = 30
-        }
-        
         if ($Body) {
-            $params.Body = $Body
+            $jsonBody = $Body | ConvertTo-Json -Depth 10
+            $response = Invoke-RestMethod -Uri $uri -Method $Method -Headers $headers -Body $jsonBody
+        }
+        else {
+            $response = Invoke-RestMethod -Uri $uri -Method $Method -Headers $headers
         }
         
-        Write-Log "Wykonuję $Method $uri (Redmine 4.2)"
-        $response = Invoke-RestMethod @params
-        
-        Write-Log "API call zakończony pomyślnie"
+        Write-Log "API call completed successfully"
         return $response
     }
     catch {
-        $errorMsg = "Błąd API: $($_.Exception.Message)"
-        if ($_.Exception.Response) {
-            $errorMsg += " (HTTP $($_.Exception.Response.StatusCode))"
-        }
-        Write-Log $errorMsg "ERROR"
-        throw $errorMsg
+        Write-Log "API call failed: $($_.Exception.Message)" "ERROR"
+        throw
     }
 }
 
-# Funkcja do pobierania projektów (Redmine 4.2)
-function Get-RedmineProjects {
+# Function to get projects
+function Get-Projects {
+    param([object]$Config)
+    
     try {
-        $response = Invoke-RedmineAPI -Method "GET" -Endpoint "/projects.json"
+        $response = Invoke-RedmineAPI -Method "GET" -Endpoint "/projects.json" -Config $Config
         return $response.projects
     }
     catch {
-        Write-Log "Nie udało się pobrać listy projektów" "ERROR"
-        return @()
+        Write-Log "Failed to get projects list" "ERROR"
+        throw
     }
 }
 
-# Funkcja do pobierania zadań projektu (Redmine 4.2)
-function Get-RedmineIssues {
-    param([int]$ProjectId)
+# Function to get project issues
+function Get-ProjectIssues {
+    param(
+        [object]$Config,
+        [int]$Limit = 50
+    )
     
     try {
-        # Redmine 4.2 może mieć inne limity
-        $endpoint = "/issues.json?project_id=$ProjectId&limit=50"
-        $response = Invoke-RedmineAPI -Method "GET" -Endpoint $endpoint
+        $endpoint = "/issues.json?project_id=$($Config.redmine_config.project_id)&limit=$Limit"
+        $response = Invoke-RedmineAPI -Method "GET" -Endpoint $endpoint -Config $Config
         return $response.issues
     }
     catch {
-        Write-Log "Nie udało się pobrać zadań dla projektu $ProjectId" "ERROR"
-        return @()
+        Write-Log "Failed to get issues for project $($Config.redmine_config.project_id)" "ERROR"
+        throw
     }
 }
 
-# Funkcja do tworzenia zadania (Redmine 4.2)
-function New-RedmineIssue {
-    param([hashtable]$IssueData)
+# Function to create issue
+function New-Issue {
+    param(
+        [object]$Config,
+        [object]$IssueData
+    )
     
     try {
         $body = @{
             issue = $IssueData
-        } | ConvertTo-Json -Depth 10
+        }
         
-        $response = Invoke-RedmineAPI -Method "POST" -Endpoint "/issues.json" -Body $body
-        Write-Log "Zadanie utworzone pomyślnie: $($response.issue.id)"
-        return $response.issue
+        $response = Invoke-RedmineAPI -Method "POST" -Endpoint "/issues.json" -Body $body -Config $Config
+        
+        if ($response.issue) {
+            Write-Log "Issue created successfully: $($response.issue.id)"
+            return $response.issue
+        }
+        else {
+            Write-Log "Failed to create issue" "ERROR"
+            throw "Invalid response from API"
+        }
     }
     catch {
-        Write-Log "Nie udało się utworzyć zadania" "ERROR"
+        Write-Log "Failed to create issue" "ERROR"
         throw
     }
 }
 
-# Funkcja do aktualizacji zadania (Redmine 4.2)
-function Update-RedmineIssue {
+# Function to update issue
+function Update-Issue {
     param(
+        [object]$Config,
         [int]$IssueId,
-        [hashtable]$UpdateData
+        [object]$UpdateData
     )
     
     try {
-        # Pobierz aktualne zadanie
-        $currentIssue = Invoke-RedmineAPI -Method "GET" -Endpoint "/issues/$IssueId.json"
-        
-        # Dodaj changelog jeśli jest wymagany
-        if ($UpdateData.description -and $currentIssue.issue.description) {
-            $changelog = "`n`n## Changelog`n- $(Get-Date -Format 'yyyy-MM-dd HH:mm'): $($UpdateData.description)"
-            $UpdateData.description = $currentIssue.issue.description + $changelog
-        }
-        
         $body = @{
             issue = $UpdateData
-        } | ConvertTo-Json -Depth 10
+        }
         
-        $response = Invoke-RedmineAPI -Method "PUT" -Endpoint "/issues/$IssueId.json" -Body $body
-        Write-Log "Zadanie $IssueId zaktualizowane pomyślnie"
+        $endpoint = "/issues/$IssueId.json"
+        $response = Invoke-RedmineAPI -Method "PUT" -Endpoint $endpoint -Body $body -Config $Config
+        
+        Write-Log "Issue $IssueId updated successfully"
         return $response
     }
     catch {
-        Write-Log "Nie udało się zaktualizować zadania $IssueId" "ERROR"
+        Write-Log "Failed to update issue $IssueId" "ERROR"
         throw
     }
 }
 
-# Funkcja do tworzenia wersji (Redmine 4.2)
-function New-RedmineVersion {
-    param([hashtable]$VersionData)
+# Function to create version
+function New-Version {
+    param(
+        [object]$Config,
+        [object]$VersionData
+    )
     
     try {
         $body = @{
             version = $VersionData
-        } | ConvertTo-Json -Depth 5
+        }
         
-        $response = Invoke-RedmineAPI -Method "POST" -Endpoint "/versions.json" -Body $body
-        Write-Log "Wersja utworzona pomyślnie: $($response.version.id)"
-        return $response.version
+        $response = Invoke-RedmineAPI -Method "POST" -Endpoint "/projects/$($Config.redmine_config.project_id)/versions.json" -Body $body -Config $Config
+        
+        if ($response.version) {
+            Write-Log "Version created successfully: $($response.version.id)"
+            return $response.version
+        }
+        else {
+            Write-Log "Failed to create version" "ERROR"
+            throw "Invalid response from API"
+        }
     }
     catch {
-        Write-Log "Nie udało się utworzyć wersji" "ERROR"
+        Write-Log "Failed to create version" "ERROR"
         throw
     }
 }
 
-# Główna logika skryptu
+# Function to save data to file
+function Save-DataToFile {
+    param(
+        [object]$Data,
+        [string]$FilePath
+    )
+    
+    try {
+        $jsonData = $Data | ConvertTo-Json -Depth 10
+        Set-Content -Path $FilePath -Value $jsonData -Encoding UTF8
+        Write-Log "Data saved to: $FilePath"
+    }
+    catch {
+        Write-Log "Failed to save data to file: $($_.Exception.Message)" "ERROR"
+        throw
+    }
+}
+
+# Main execution
 try {
-    Write-Log "Rozpoczynam Redmine API Assistant (Redmine 4.2)"
+    Write-Log "Redmine API Script (v4.2) started"
     
-    # Wczytaj konfigurację
-    $script:Config = Load-Config -ConfigPath $ConfigFile
-    Test-Config -Config $script:Config
+    # Load and validate configuration
+    $config = Load-Config -ConfigPath $ConfigFile
+    Validate-Config -Config $config
     
-    # Wykonaj akcję
+    # Execute requested action
     switch ($Action.ToLower()) {
         "get-projects" {
-            $projects = Get-RedmineProjects
+            $projects = Get-Projects -Config $config
             if ($OutputFile) {
-                $projects | ConvertTo-Json -Depth 10 | Out-File -FilePath $OutputFile -Encoding UTF8
-                Write-Log "Lista projektów zapisana do: $OutputFile"
-            } else {
-                $projects | Format-Table -Property id, name, identifier, status
+                Save-DataToFile -Data $projects -FilePath $OutputFile
+            }
+            else {
+                $projects | ConvertTo-Json -Depth 10
             }
         }
         
         "get-issues" {
-            $projectId = $script:Config.redmine_config.project_id
-            $issues = Get-RedmineIssues -ProjectId $projectId
+            $issues = Get-ProjectIssues -Config $config
             if ($OutputFile) {
-                $issues | ConvertTo-Json -Depth 10 | Out-File -FilePath $OutputFile -Encoding UTF8
-                Write-Log "Lista zadań zapisana do: $OutputFile"
-            } else {
-                $issues | Format-Table -Property id, subject, status, priority, assigned_to
+                Save-DataToFile -Data $issues -FilePath $OutputFile
+            }
+            else {
+                $issues | ConvertTo-Json -Depth 10
             }
         }
         
         "create-issue" {
             if (!$DataFile) {
-                throw "Parametr DataFile jest wymagany dla akcji create-issue"
+                throw "DataFile parameter is required for create-issue action"
             }
             
             if (!(Test-Path $DataFile)) {
-                throw "Plik z danymi nie istnieje: $DataFile"
+                throw "Data file not found: $DataFile"
             }
             
-            $issueData = Get-Content -Path $DataFile -Raw | ConvertFrom-Json
-            $newIssue = New-RedmineIssue -IssueData $issueData
+            $issueData = Get-Content $DataFile | ConvertFrom-Json
+            $newIssue = New-Issue -Config $config -IssueData $issueData
             
             if ($OutputFile) {
-                $newIssue | ConvertTo-Json -Depth 10 | Out-File -FilePath $OutputFile -Encoding UTF8
-                Write-Log "Nowe zadanie zapisane do: $OutputFile"
+                Save-DataToFile -Data $newIssue -FilePath $OutputFile
+            }
+            else {
+                $newIssue | ConvertTo-Json -Depth 10
             }
         }
         
         "update-issue" {
             if (!$DataFile) {
-                throw "Parametr DataFile jest wymagany dla akcji update-issue"
+                throw "DataFile parameter is required for update-issue action"
             }
             
             if (!(Test-Path $DataFile)) {
-                throw "Plik z danymi nie istnieje: $DataFile"
+                throw "Data file not found: $DataFile"
             }
             
-            $updateData = Get-Content -Path $DataFile -Raw | ConvertFrom-Json
-            $issueId = $updateData.id
-            $updateData.Remove("id")
+            $updateData = Get-Content $DataFile | ConvertFrom-Json
             
-            Update-RedmineIssue -IssueId $issueId -UpdateData $updateData
+            if (!$updateData.id) {
+                throw "Issue ID is required in update data"
+            }
+            
+            $result = Update-Issue -Config $config -IssueId $updateData.id -UpdateData $updateData
+            
+            if ($OutputFile) {
+                Save-DataToFile -Data $result -FilePath $OutputFile
+            }
+            else {
+                $result | ConvertTo-Json -Depth 10
+            }
         }
         
         "create-version" {
             if (!$DataFile) {
-                throw "Parametr DataFile jest wymagany dla akcji create-version"
+                throw "DataFile parameter is required for create-version action"
             }
             
             if (!(Test-Path $DataFile)) {
-                throw "Plik z danymi nie istnieje: $DataFile"
+                throw "Data file not found: $DataFile"
             }
             
-            $versionData = Get-Content -Path $DataFile -Raw | ConvertFrom-Json
-            $newVersion = New-RedmineVersion -VersionData $versionData
+            $versionData = Get-Content $DataFile | ConvertFrom-Json
+            $newVersion = New-Version -Config $config -VersionData $versionData
             
             if ($OutputFile) {
-                $newVersion | ConvertTo-Json -Depth 10 | Out-File -FilePath $OutputFile -Encoding UTF8
-                Write-Log "Nowa wersja zapisana do: $OutputFile"
+                Save-DataToFile -Data $newVersion -FilePath $OutputFile
+            }
+            else {
+                $newVersion | ConvertTo-Json -Depth 10
             }
         }
         
         default {
-            Write-Log "Nieznana akcja: $Action" "ERROR"
-            Write-Host @"
-Dostępne akcje:
-- get-projects    - Pobierz listę projektów
-- get-issues      - Pobierz zadania projektu
-- create-issue    - Utwórz nowe zadanie
-- update-issue    - Zaktualizuj istniejące zadanie
-- create-version  - Utwórz nową wersję
-
-Przykład użycia:
-.\redmine-api.ps1 -Action get-projects -ConfigFile project-config.json
-.\redmine-api.ps1 -Action create-issue -ConfigFile project-config.json -DataFile issue-data.json
-
-Uwaga: Ten skrypt jest kompatybilny z Redmine 4.2+
-"@
-            exit 1
+            throw "Unknown action: $Action. Supported actions: get-projects, get-issues, create-issue, update-issue, create-version"
         }
     }
     
-    Write-Log "Operacja zakończona pomyślnie"
+    Write-Log "Operation completed successfully"
 }
 catch {
-    Write-Log "Błąd krytyczny: $($_.Exception.Message)" "CRITICAL"
+    Write-Log "Critical error: $($_.Exception.Message)" "ERROR"
     exit 1
 }
 finally {
-    Write-Log "Redmine API Assistant (Redmine 4.2) zakończony"
+    Write-Log "Redmine API Script (Redmine 4.2) completed"
 }
+
+# Note: This script is compatible with Redmine 4.2+

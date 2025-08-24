@@ -24,168 +24,160 @@
    # Linux/macOS: ./start-example.sh
    ```
 
-## Workflow z Cursor AI
+## Workflow with Cursor AI
 
-### Faza 1: Inicjalizacja
-```
-Użytkownik: "Chcę utworzyć projekt 'System zarządzania zadaniami'"
-Cursor AI: [Tworzy strukturę + pyta o dane Redmine]
-Użytkownik: [Podaje dane]
-Cursor AI: [Generuje konfigurację + potwierdza]
-```
+### 1. First Run
 
-### Faza 2: Analiza wymagań
-```
-Użytkownik: [Dostarcza specyfikację/wymagania]
-Cursor AI: [Analizuje + tworzy opracowanie]
-Użytkownik: [Zatwierdza lub prosi o zmiany]
-```
+1. **Open Cursor AI** in the `project-ai-manager` directory
+2. **Describe your project** - explain what you want to do
+3. **Provide Redmine data**:
+   - Redmine URL
+   - API key
+   - Project ID
+   - Language (en)
+4. **Cursor AI will create** project structure automatically
 
-### Faza 3: Planowanie zadań
-```
-Cursor AI: [Generuje listę zadań + opisy]
-Użytkownik: [Zatwierdza plan]
-```
+### 2. Project Structure
 
-### Faza 4: Synchronizacja
+After initialization you'll get:
 ```
-Cursor AI: [Tworzy/aktualizuje zadania w Redmine]
-Użytkownik: [Otrzymuje raport]
+projects/[project-name]-[date]/
+├── config/project-config.json    # Configuration
+├── specs/                        # Specifications
+├── requirements/                 # Requirements
+├── tasks/                        # Tasks
+├── docs/                         # Documentation
+└── changelog/                    # Change history
 ```
 
-## Używanie skryptów PowerShell
+## Configuration
 
-### Podstawowe komendy
+### Project Configuration File
 
-```powershell
-# Pobierz listę projektów
-.\core\scripts\redmine-api.ps1 -Action get-projects -ConfigFile projects\moj-projekt\config\project-config.json
-
-# Pobierz zadania projektu
-.\core\scripts\redmine-api.ps1 -Action get-issues -ConfigFile projects\moj-projekt\config\project-config.json
-
-# Utwórz nowe zadanie
-.\core\scripts\redmine-api.ps1 -Action create-issue -ConfigFile projects\moj-projekt\config\project-config.json -DataFile issue-data.json
-
-# Zaktualizuj zadanie
-.\core\scripts\redmine-api.ps1 -Action update-issue -ConfigFile projects\moj-projekt\config\project-config.json -DataFile update-data.json
-```
-
-### Format danych dla zadań
-
-**issue-data.json:**
-```json
-{
-  "subject": "Implementacja logowania użytkowników",
-  "description": "## Opis funkcjonalności\nSystem logowania z walidacją...",
-  "tracker_id": 1,
-  "priority_id": 2,
-  "estimated_hours": 8,
-  "category_id": 1
-}
-```
-
-**update-data.json:**
-```json
-{
-  "id": 123,
-  "description": "Dodano obsługę 2FA",
-  "estimated_hours": 12
-}
-```
-
-## Konfiguracja projektu
-
-### Plik project-config.json
+Each project has its own `project-config.json`:
 
 ```json
 {
   "project_info": {
-    "name": "Nazwa projektu",
-    "language": "pl",
+    "name": "Project Name",
+    "description": "Project description",
+    "language": "en",
     "status": "planning"
   },
   "redmine_config": {
+    "version": "5.0",
     "url": "https://redmine.example.com",
     "api_key": "your_api_key",
-    "project_id": 123,
-    "version": "5.0"
+    "project_id": 123
+  },
+  "workflow_config": {
+    "auto_backup": true,
+    "require_approval": true,
+    "changelog_required": true,
+    "auto_version_creation": true
   }
 }
 ```
 
-### Ustawienia workflow
+### Workflow Settings
 
-- **auto_version_creation**: Automatyczne tworzenie wersji
-- **changelog_required**: Obowiązkowy changelog
-- **backup_before_changes**: Backup przed zmianami
-- **max_retries**: Maksymalna liczba prób API
+- **auto_backup**: Automatic backup before changes
+- **require_approval**: User approval required for critical operations
+- **changelog_required**: Changelog required for task updates
+- **auto_version_creation**: Automatic version creation
 
-## Reguły bezpieczeństwa
+## Script Usage
 
-### Co system NIGDY nie robi:
-- ❌ Usuwa zadania z Redmine
-- ❌ Nadpisuje opisy bez changelogu
-- ❌ Modyfikuje ustawienia projektu bez potwierdzenia
+### Basic Operations
 
-### Co system zawsze robi:
-- ✅ Tworzy backup przed zmianami
-- ✅ Loguje wszystkie operacje
-- ✅ Pyta o potwierdzenie ważnych operacji
-- ✅ Dodaje changelog do zmian
+```powershell
+# Get projects list
+.\core\scripts\script-manager.ps1 -Action "get-projects" -ConfigFile "config\project-config.json"
 
-## Rozwiązywanie problemów
+# Get project issues
+.\core\scripts\script-manager.ps1 -Action "get-issues" -ConfigFile "config\project-config.json"
 
-### Błąd "API call failed"
-1. Sprawdź poprawność klucza API
-2. Sprawdź uprawnienia użytkownika
-3. Sprawdź dostępność Redmine
+# Create new issue
+.\core\scripts\script-manager.ps1 -Action "create-issue" -ConfigFile "config\project-config.json" -DataFile "tasks\new-issue.json"
+```
 
-### Błąd "Configuration invalid"
-1. Sprawdź format pliku JSON
-2. Sprawdź wymagane pola w konfiguracji
-3. Sprawdź poprawność URL
+### Available Actions
 
-### Błąd "Permission denied"
-1. Sprawdź uprawnienia do katalogów
-2. Sprawdź uprawnienia użytkownika PowerShell
-3. Uruchom PowerShell jako administrator
+- **get-projects**: Get list of all projects
+- **get-issues**: Get issues for specific project
+- **create-issue**: Create new issue
+- **update-issue**: Update existing issue
+- **create-version**: Create new version
+- **get-versions**: Get project versions
 
-## Najlepsze praktyki
+## Project Management
 
-### Organizacja projektów
-- Używaj opisowych nazw projektów
-- Grupuj powiązane projekty w podkatalogach
-- Regularnie archiwizuj zakończone projekty
+### Creating New Projects
 
-### Zarządzanie zadaniami
-- Zawsze opisuj zmiany w changelogu
-- Używaj szablonów dla typowych zadań
-- Regularnie synchronizuj z Redmine
+1. **Describe requirements** to Cursor AI
+2. **Review generated structure**
+3. **Approve project setup**
+4. **Start working with tasks**
 
-### Bezpieczeństwo
-- Nie commituj kluczy API do git
-- Używaj różnych kluczy dla różnych środowisk
-- Regularnie rotuj klucze API
+### Task Management
 
-## Wsparcie i rozwój
+- **Task creation**: AI generates comprehensive descriptions
+- **Version management**: Automatic version creation
+- **Changelog**: Required for all updates
+- **Backup**: Automatic before changes
 
-### Repozytorium
-- Kod źródłowy: [GitHub URL]
-- Dokumentacja: [Wiki URL]
-- Issues: [GitHub Issues URL]
+### Safety Features
 
-### Kontakt
-- Autor: [Twoje imię]
-- Email: [Twój email]
-- GitHub: [Twój profil]
+- **No data loss**: Automatic backup before changes
+- **User approval**: Required for critical operations
+- **Change tracking**: Complete changelog for all modifications
+- **Audit logging**: Full operation history
 
-## Changelog
+## Learning Project
 
-- **v1.0.0** - Pierwsza wersja z podstawowymi funkcjonalnościami
-- **v1.1.0** - Dodano obsługę wersji i kategorii
-- **v2.0.0** - Przepisano na modułową architekturę
+The **Example-01** project provides a safe environment for:
 
----
+- ✅ **Safe experimentation** with all features
+- ✅ **Complete functionality testing**
+- ✅ **Real-world scenario practice**
+- ✅ **Best practices learning**
 
-**Uwaga**: Ten system jest w fazie rozwoju. Wszystkie sugestie i zgłoszenia błędów są mile widziane!
+## Troubleshooting
+
+### Common Issues
+
+- **API connection errors**: Check Redmine URL and API key
+- **Permission denied**: Verify project access rights
+- **Script errors**: Check PowerShell execution policy
+
+### Getting Help
+
+- **Documentation**: Comprehensive guides and examples
+- **Example project**: Working demonstration environment
+- **GitHub Issues**: Report bugs and request features
+
+## Development Notes
+
+### System Requirements
+
+- **Windows**: PowerShell 5.1+, .NET Framework 4.5+
+- **Linux/macOS**: Bash 4.0+, curl, jq, Docker
+- **Cross-platform**: Docker Desktop, Git
+
+### Architecture
+
+- **Cross-platform scripts**: PowerShell (Windows) + Bash (Linux/macOS)
+- **Versioned API support**: Redmine 3.4, 4.2, 5.0+
+- **Modular design**: Easy to extend and customize
+- **Rule-based system**: Configurable safety and workflow rules
+
+## Version History
+
+- **v1.0.0** - First version with basic features
+- **v1.1.0** - Added version and category support
+- **v1.2.0** - Cross-platform script support
+- **v1.3.0** - Enhanced documentation and examples
+
+## Support
+
+**Note**: This system is under development. All suggestions and bug reports are welcome!
