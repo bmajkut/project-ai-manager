@@ -1,0 +1,75 @@
+{
+  "project_info": {
+    "name": "[NAZWA_PROJEKTU]",
+    "description": "[Opis projektu]",
+    "language": "pl",
+    "created_date": "[YYYY-MM-DD]",
+    "status": "planning"
+  },
+  "redmine_config": {
+    "url": "https://redmine.example.com",
+    "api_key": "[YOUR_API_KEY]",
+    "project_id": 123,
+    "version": "5.0",
+    "default_assignee_id": null,
+    "default_tracker_id": 1,
+    "default_status_id": 1,
+    "default_priority_id": 2
+  },
+  "project_structure": {
+    "versions": [
+      {
+        "name": "v1.0.0",
+        "description": "Pierwsza wersja projektu",
+        "target_date": "[YYYY-MM-DD]",
+        "status": "open"
+      }
+    ],
+    "categories": [
+      {
+        "name": "Funkcjonalność",
+        "description": "Główne funkcjonalności systemu"
+      },
+      {
+        "name": "Błędy",
+        "description": "Błędy i problemy techniczne"
+      },
+      {
+        "name": "Wsparcie",
+        "description": "Zadania wsparcia i utrzymania"
+      }
+    ]
+  },
+  "task_templates": {
+    "feature": {
+      "tracker_id": 1,
+      "priority_id": 2,
+      "estimated_hours": 8,
+      "template": "feature_template.md"
+    },
+    "bug": {
+      "tracker_id": 2,
+      "priority_id": 3,
+      "estimated_hours": 4,
+      "template": "bug_template.md"
+    },
+    "support": {
+      "tracker_id": 3,
+      "priority_id": 1,
+      "estimated_hours": 2,
+      "template": "support_template.md"
+    }
+  },
+  "workflow_settings": {
+    "auto_version_creation": true,
+    "changelog_required": true,
+    "backup_before_changes": true,
+    "max_retries": 3,
+    "retry_delay": 1000
+  },
+  "notifications": {
+    "email_on_task_creation": false,
+    "email_on_task_update": false,
+    "log_all_operations": true
+  }
+}

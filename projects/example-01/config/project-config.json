@@ -1,0 +1,111 @@
+{
+  "project_info": {
+    "name": "Example-01 - Redmine Learning Project",
+    "description": "Demonstration project for learning Redmine AI Assistant",
+    "language": "en",
+    "created_date": "2024-08-24",
+    "status": "learning",
+    "project_type": "example"
+  },
+  "system_config": {
+    "target_platforms": ["Windows", "Linux", "macOS"],
+    "auto_detect_os": true,
+    "fallback_platform": "Windows",
+    "script_manager": "core/scripts/script-manager.ps1"
+  },
+  "redmine_config": {
+    "url": "http://localhost:3000",
+    "api_key": "example_api_key_will_be_generated",
+    "project_id": 1,
+    "version": "5.0",
+    "default_assignee_id": 1,
+    "default_tracker_id": 1,
+    "default_status_id": 1,
+    "default_priority_id": 2
+  },
+  "project_structure": {
+    "versions": [
+      {
+        "name": "v1.0.0",
+        "description": "First version - basic functionality",
+        "target_date": "2024-09-30",
+        "status": "open"
+      },
+      {
+        "name": "v1.1.0",
+        "description": "Second version - extended functionality",
+        "target_date": "2024-10-31",
+        "status": "open"
+      }
+    ],
+    "categories": [
+      {
+        "name": "Feature",
+        "description": "Main system functionality"
+      },
+      {
+        "name": "Bug",
+        "description": "Technical issues and problems"
+      },
+      {
+        "name": "Support",
+        "description": "Support and maintenance tasks"
+      },
+      {
+        "name": "Documentation",
+        "description": "Documentation tasks"
+      }
+    ]
+  },
+  "task_templates": {
+    "feature": {
+      "tracker_id": 1,
+      "priority_id": 2,
+      "estimated_hours": 8,
+      "template": "feature_template.md"
+    },
+    "bug": {
+      "tracker_id": 2,
+      "priority_id": 3,
+      "estimated_hours": 4,
+      "template": "bug_template.md"
+    },
+    "support": {
+      "tracker_id": 3,
+      "priority_id": 1,
+      "estimated_hours": 2,
+      "template": "support_template.md"
+    },
+    "documentation": {
+      "tracker_id": 4,
+      "priority_id": 2,
+      "estimated_hours": 3,
+      "template": "documentation_template.md"
+    }
+  },
+  "workflow_settings": {
+    "auto_version_creation": true,
+    "changelog_required": true,
+    "backup_before_changes": true,
+    "max_retries": 3,
+    "retry_delay": 1000
+  },
+  "notifications": {
+    "email_on_task_creation": false,
+    "email_on_task_update": false,
+    "log_all_operations": true
+  },
+  "project_rules": {
+    "allow_issue_deletion": true,
+    "allow_full_cleanup": true,
+    "learning_mode": true,
+    "max_issues_per_project": 100,
+    "auto_cleanup_after_days": 7,
+    "special_permissions": [
+      "delete_issues",
+      "delete_versions",
+      "reset_project",
+      "full_cleanup"
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: redmine-example-postgres
+    environment:
+      POSTGRES_DB: redmine
+      POSTGRES_USER: redmine
+      POSTGRES_PASSWORD: redmine123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - redmine-network
+
+  redmine:
+    image: redmine:5.0
+    container_name: redmine-example-app
+    depends_on:
+      - postgres
+    environment:
+      REDMINE_DB_POSTGRES: postgres
+      REDMINE_DB_HOST: postgres
+      REDMINE_DB_PORT: 5432
+      REDMINE_DB_DATABASE: redmine
+      REDMINE_DB_USERNAME: redmine
+      REDMINE_DB_PASSWORD: redmine123
+      REDMINE_SECRET_KEY_BASE: "example-secret-key-for-development-only"
+    ports:
+      - "3000:3000"
+    volumes:
+      - redmine_files:/usr/src/redmine/files
+      - redmine_logs:/usr/src/redmine/log
+    networks:
+      - redmine-network
+    restart: unless-stopped
+
+  adminer:
+    image: adminer:latest
+    container_name: redmine-example-adminer
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - redmine-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redmine_files:
+  redmine_logs:
+
+networks:
+  redmine-network:
+    driver: bridge

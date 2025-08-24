@@ -1,0 +1,62 @@
+[
+  {
+    "subject": "Utworzenie strony głównej",
+    "description": "# Utworzenie strony głównej\n\n## Opis\nStworzenie nowoczesnej i responsywnej strony głównej dla aplikacji webowej.\n\n## Wymagania\n- [ ] Responsywny design\n- [ ] Obsługa różnych rozmiarów ekranów\n- [ ] Szybkie ładowanie (< 3s)\n- [ ] SEO-friendly\n\n## Kryteria akceptacji\n- [ ] Strona ładuje się na wszystkich urządzeniach\n- [ ] Prędkość ładowania < 3 sekundy\n- [ ] Wszystkie linki działają poprawnie\n- [ ] Design jest zgodny z mockupami\n\n## Uwagi techniczne\nUżyj HTML5, CSS3 i JavaScript. Zoptymalizuj obrazy i CSS.\n\n## Szacowany czas\n8 godzin",
+    "tracker_id": 1,
+    "priority_id": 2,
+    "estimated_hours": 8,
+    "category_id": 1,
+    "fixed_version_id": 1,
+    "assigned_to_id": 1
+  },
+  {
+    "subject": "Implementacja systemu logowania",
+    "description": "# Implementacja systemu logowania\n\n## Opis\nStworzenie bezpiecznego systemu uwierzytelniania użytkowników.\n\n## Wymagania\n- [ ] Formularz logowania\n- [ ] Walidacja danych\n- [ ] Szyfrowanie haseł\n- [ ] Sesje użytkowników\n- [ ] Resetowanie hasła\n\n## Kryteria akceptacji\n- [ ] Użytkownik może się zalogować\n- [ ] Hasła są szyfrowane\n- [ ] Sesje są bezpieczne\n- [ ] Resetowanie hasła działa\n\n## Uwagi techniczne\nUżyj bcrypt do szyfrowania haseł. Implementuj JWT dla sesji.\n\n## Szacowany czas\n12 godzin",
+    "tracker_id": 1,
+    "priority_id": 1,
+    "estimated_hours": 12,
+    "category_id": 1,
+    "fixed_version_id": 1,
+    "assigned_to_id": 1
+  },
+  {
+    "subject": "Napraw błędu 404 na stronie kontaktowej",
+    "description": "# Napraw błędu 404 na stronie kontaktowej\n\n## Opis\nUżytkownicy otrzymują błąd 404 przy próbie dostępu do strony kontaktowej.\n\n## Kroki do reprodukcji\n1. Przejdź do /contact\n2. Otrzymasz błąd 404\n\n## Oczekiwane zachowanie\nStrona kontaktowa powinna się wyświetlić poprawnie.\n\n## Uwagi techniczne\nSprawdź routing w aplikacji. Prawdopodobnie brakuje mapowania URL.\n\n## Szacowany czas\n2 godziny",
+    "tracker_id": 2,
+    "priority_id": 3,
+    "estimated_hours": 2,
+    "category_id": 2,
+    "fixed_version_id": 1,
+    "assigned_to_id": 1
+  },
+  {
+    "subject": "Dodanie dokumentacji API",
+    "description": "# Dodanie dokumentacji API\n\n## Opis\nStworzenie kompletnej dokumentacji dla wszystkich endpointów API.\n\n## Wymagania\n- [ ] Opis wszystkich endpointów\n- [ ] Przykłady użycia\n- [ ] Kody błędów\n- [ ] Schematy danych\n\n## Kryteria akceptacji\n- [ ] Dokumentacja jest kompletna\n- [ ] Przykłady działają\n- [ ] Jest czytelna dla deweloperów\n\n## Uwagi techniczne\nUżyj Swagger/OpenAPI do generowania dokumentacji.\n\n## Szacowany czas\n6 godzin",
+    "tracker_id": 4,
+    "priority_id": 2,
+    "estimated_hours": 6,
+    "category_id": 4,
+    "fixed_version_id": 2,
+    "assigned_to_id": 1
+  },
+  {
+    "subject": "Optymalizacja bazy danych",
+    "description": "# Optymalizacja bazy danych\n\n## Opis\nPoprawa wydajności zapytań SQL i indeksów w bazie danych.\n\n## Wymagania\n- [ ] Analiza wolnych zapytań\n- [ ] Dodanie brakujących indeksów\n- [ ] Optymalizacja zapytań\n- [ ] Monitoring wydajności\n\n## Kryteria akceptacji\n- [ ] Czas odpowiedzi < 100ms\n- [ ] Wszystkie zapytania są zoptymalizowane\n- [ ] Dodano odpowiednie indeksy\n\n## Uwagi techniczne\nUżyj EXPLAIN PLAN do analizy zapytań. Dodaj indeksy dla często używanych kolumn.\n\n## Szacowany czas\n10 godzin",
+    "tracker_id": 1,
+    "priority_id": 2,
+    "estimated_hours": 10,
+    "category_id": 1,
+    "fixed_version_id": 2,
+    "assigned_to_id": 1
+  },
+  {
+    "subject": "Testowanie responsywności",
+    "description": "# Testowanie responsywności\n\n## Opis\nPrzetestowanie aplikacji na różnych urządzeniach i rozdzielczościach.\n\n## Wymagania\n- [ ] Test na urządzeniach mobilnych\n- [ ] Test na tabletach\n- [ ] Test na różnych przeglądarkach\n- [ ] Test na różnych rozdzielczościach\n\n## Kryteria akceptacji\n- [ ] Aplikacja działa na wszystkich urządzeniach\n- [ ] Layout jest poprawny\n- [ ] Funkcjonalność jest dostępna\n\n## Uwagi techniczne\nUżyj narzędzi deweloperskich przeglądarki do testowania różnych rozdzielczości.\n\n## Szacowany czas\n4 godziny",
+    "tracker_id": 3,
+    "priority_id": 2,
+    "estimated_hours": 4,
+    "category_id": 3,
+    "fixed_version_id": 2,
+    "assigned_to_id": 1
+  }
+]

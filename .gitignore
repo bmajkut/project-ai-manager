@@ -1,0 +1,80 @@
+# Project AI Manager - Git Ignore File
+# Author: Bartosz Majkut
+
+# Private notes and sensitive data
+private-notes/
+sensitive-data/
+*.key
+*.pem
+*.p12
+
+# Configuration files with sensitive data
+.env
+.env.local
+.env.production
+config/local/
+config/private/
+
+# Logs and temporary files
+logs/
+*.log
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Backup files
+backups/
+*.backup
+*.bak
+*.sql
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build and dependency files
+node_modules/
+dist/
+build/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Docker volumes and data
+docker-data/
+postgres-data/
+redmine-files/
+
+# Test and coverage files
+coverage/
+.coverage
+.pytest_cache/
+.tox/
+
+# Documentation builds
+docs/_build/
+site/
+
+# Package files
+*.tar.gz
+*.zip
+*.rar
+
+# Local development files
+local/
+dev/
+development/
