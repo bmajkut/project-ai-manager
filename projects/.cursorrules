@@ -1,0 +1,204 @@
+# Projects Rules - Project AI Manager
+# Rules for Projects directory - automatically loaded by Cursor AI
+
+@import "../.cursorrules"
+
+## 🎯 PROJECTS RULES
+
+### 1. Project Structure
+- **Each project** in separate directory
+- **Consistent structure** for all projects
+- **Only configuration and data** - no business logic
+- **Use templates** from `core/templates/`
+
+### 2. Project Content
+- **`config/`**: Project configuration (project-config.json)
+- **`docs/input/`**: Input documentation
+- **`docs/output/`**: Output specifications
+- **`data/`**: Project data (not in repository)
+
+### 3. Core Integration
+- **USE ONLY scripts** from `core/scripts/`
+- **Generate data** in JSON format
+- **No hardcoded content** in projects
+- **All operations** through Core scripts
+
+## 📁 PROJECT ORGANIZATION
+
+### Standard Structure
+```
+projects/[project-name]/
+├── config/                     # Project configuration
+│   ├── project-config.json    # AI Manager configuration
+│   └── project-rules.md       # Project-specific rules
+├── docs/                      # Documentation
+│   ├── input/                 # Input documentation
+│   └── output/                # Output specifications
+├── data/                      # Project data (gitignore)
+│   ├── postgres/              # Database
+│   └── redmine-api/           # Redmine API data
+└── README.md                  # Project documentation
+```
+
+### Project Configuration
+- **`project-config.json`**: Redmine and AI Manager configuration
+- **`project-rules.md`**: Project-specific rules
+- **No Redmine scripts** in projects
+- **Only configuration** and documentation
+
+## 🚫 FORBIDDEN IN PROJECTS
+
+### ❌ NEVER do:
+- Place Redmine scripts in project directories
+- Hardcode task content in scripts
+- Duplicate Core functionality in projects
+- Create custom Redmine scripts
+
+### ✅ ALWAYS do:
+- Use scripts from `core/scripts/`
+- Generate data in JSON format
+- Use common functions from Core
+- Follow Core rules
+
+## 🔄 PROJECT WORKFLOW
+
+### 1. Initialization
+- **Use templates** from `core/templates/`
+- **Configure** `project-config.json`
+- **Create directory** structure
+
+### 2. Requirements Analysis
+- **Place documentation** in `docs/input/`
+- **AI generates** specifications in `docs/output/`
+- **User approves** before implementation
+
+### 3. Implementation
+- **Use Core scripts** for environment validation
+- **Use Core scripts** for task creation
+- **Everything through** `core/scripts/`
+
+## 📋 DATA FLOW ARCHITECTURE
+
+### Input → Output → Redmine Flow:
+```
+docs/input/ → AI Analysis → docs/output/tasks.json → Core Scripts → Redmine
+```
+
+### JSON Task Format (docs/output/tasks.json):
+```json
+{
+  "project": {
+    "name": "Project Name",
+    "identifier": "project-identifier"
+  },
+  "versions": [
+    {
+      "name": "v1.0.0",
+      "description": "First version description",
+      "due_date": "2025-12-31"
+    }
+  ],
+  "tasks": [
+    {
+      "subject": "Task Title",
+      "description": "Task description with markdown",
+      "tracker": "Task",
+      "priority": "High",
+      "estimated_hours": 80,
+      "version": "v1.0.0",
+      "dependencies": ["task-id-1", "task-id-2"]
+    }
+  ]
+}
+```
+
+## 🔍 REDMINE ENVIRONMENT VALIDATION
+
+### Required Core Elements:
+- **Issue Statuses** (New, In Progress, Resolved, Closed, etc.)
+- **Trackers** (Task, Bug, Feature, etc.)
+- **Issue Priorities** (Low, Normal, High, etc.)
+
+### Validation Process:
+1. **Check if target project exists** in Redmine
+2. **Validate Redmine core elements**
+3. **Generate user action list** for missing elements
+4. **Wait for manual setup** before proceeding
+
+## 📝 USER ACTION LIST FORMAT
+
+### File: `docs/output/redmine-setup-required.md`
+```markdown
+# Redmine Setup Required
+
+## Missing Elements
+
+### 1. Issue Statuses
+- [ ] New
+- [ ] In Progress  
+- [ ] Resolved
+- [ ] Closed
+
+**Action:** Go to Administration → Issue Statuses and create missing statuses
+
+### 2. Trackers
+- [ ] Task
+- [ ] Bug
+- [ ] Feature
+
+**Action:** Go to Administration → Trackers and create missing trackers
+
+### 3. Issue Priorities
+- [ ] Low
+- [ ] Normal
+- [ ] High
+
+**Action:** Go to Administration → Enumerations → Issue Priorities and create missing priorities
+
+## After Setup
+1. Run the validation script again
+2. Proceed with task creation
+```
+
+## 🎯 PROJECT-SPECIFIC RULES
+
+### Rule Hierarchy
+1. **Global Rules**: Apply to all projects by default
+2. **Project Rules**: Override global rules for specific projects
+3. **Learning Mode**: Special permissions for practice projects
+
+### Exception Types
+- **`allow_issue_deletion`**: Override deletion prohibition
+- **`allow_full_cleanup`**: Allow complete project reset
+- **`learning_mode`**: Enable experimental features
+- **`special_permissions`**: Custom rule overrides
+
+### Rule Detection
+- Check `project-config.json` for `project_rules` section
+- Look for `project-rules.md` in project config directory
+- Apply most restrictive rules by default
+- Log all rule exceptions for audit
+
+## 🔒 COMPLIANCE AND BEST PRACTICES
+
+### Redmine Best Practices
+- **Follow Redmine naming** conventions
+- **Use appropriate** tracker types
+- **Set realistic** estimated hours
+- **Maintain consistent** priority levels
+
+### Project Management Standards
+- **Group related tasks** logically
+- **Set appropriate** due dates for versions
+- **Use descriptive** task subjects
+- **Include comprehensive** task descriptions
+
+### Documentation Standards
+- **Maintain clear** separation between input and output
+- **Use consistent** formatting and structure
+- **Include all necessary** technical details
+- **Provide clear** instructions for testers
+
+---
+
+**Projects Rules ensure consistency of all projects. Use Core scripts! 🎯**

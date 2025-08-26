@@ -1,0 +1,143 @@
+# Core Scripts Rules - Project AI Manager
+# Rules for Core scripts - automatically loaded by Cursor AI
+
+@import "../../.cursorrules"
+
+## 🔧 CORE SCRIPTS RULES
+
+### 1. Script Implementation
+- **Use only PowerShell (Windows) and Bash (Linux/macOS)**
+- **Implement comprehensive error handling** with try-catch blocks
+- **Add detailed logging** for all operations
+- **Test cross-platform compatibility** before commit
+
+### 2. Structure and Organization
+- **Windows scripts** in `core/scripts/windows/`
+- **Linux/macOS scripts** in `core/scripts/linux/`
+- **Common functions** in `core/scripts/windows/common/`
+- **Each script** in appropriate subdirectory
+
+### 3. Common Functions
+- **`redmine-common.ps1`**: All Redmine functions
+- **`script-manager.ps1`**: Cross-platform script management
+- **Reusable utilities** for all projects
+
+### 4. Validation and Security
+- **Validate all inputs** before processing
+- **Implement proper error handling** with user-friendly messages
+- **Log all operations** for audit trail
+- **Never expose sensitive data** in logs
+
+## 📁 DIRECTORY ORGANIZATION
+
+### `core/scripts/windows/`
+- **PowerShell scripts** for Windows
+- **Redmine integration** in `core/scripts/windows/redmine/`
+- **Common functions** in `core/scripts/windows/common/`
+
+### `core/scripts/linux/`
+- **Bash scripts** for Linux/macOS
+- **Redmine integration** in `core/scripts/linux/redmine/`
+- **Cross-platform utilities**
+
+### `core/scripts/windows/common/`
+- **`redmine-common.ps1`**: All Redmine functions
+- **Reusable functions** for all Windows scripts
+- **Common utilities** and helper functions
+
+## 🚫 FORBIDDEN IN CORE SCRIPTS
+
+### ❌ NEVER do:
+- Hardcode project-specific data
+- Implement business logic
+- Create scripts outside appropriate directories
+- Duplicate functionality between platforms
+
+### ✅ ALWAYS do:
+- Implement reusable functions
+- Add comprehensive error handling
+- Test cross-platform compatibility
+- Document all functions
+
+## 🔒 SCRIPT EXECUTION RULES
+
+### 1. No Hardcoded Content
+- **Scripts must NOT contain** task descriptions, project names, or business logic
+- **All data must come from** JSON files or configuration
+- **Scripts are pure utilities** for data transformation and API calls
+
+### 2. Configuration-Driven
+- **Use project-config.json** for all project-specific settings
+- **Use tasks.json** for all task data
+- **Use environment variables** for sensitive data (API keys, passwords)
+
+### 3. Cross-Platform Support
+- **Provide PowerShell** scripts for Windows
+- **Provide Bash** scripts for Linux/macOS
+- **Use script-manager.ps1** for platform detection and routing
+
+## ⚠️ ERROR HANDLING AND VALIDATION
+
+### Pre-Execution Validation
+- **Verify JSON schema** compliance
+- **Check required fields** presence
+- **Validate data types** and formats
+- **Confirm Redmine connectivity**
+
+### Post-Execution Validation
+- **Verify task creation** success
+- **Check version assignments** correctness
+- **Validate estimated hours** and priorities
+- **Confirm all dependencies** are met
+
+### Error Recovery
+- **Retry with exponential backoff** for API errors
+- **Log detailed error information** for debugging
+- **Provide user-friendly error messages**
+- **Suggest recovery actions**
+
+## 📊 LOGGING REQUIREMENTS
+
+### Operation Logging
+- **Log all API calls** with timestamps
+- **Record task creation** results
+- **Track version assignments** and updates
+- **Document any errors** and recovery actions
+
+### Project Documentation Updates
+- **Update CHANGELOG.md** with Redmine operations
+- **Record task IDs** and Redmine references
+- **Document any manual** setup requirements
+- **Track configuration** changes
+
+## 🛡️ SECURITY RULES
+
+### Credential Management
+- **Never hardcode** API keys or passwords
+- **Use environment variables** or secure configuration files
+- **Log credential usage** but never log actual values
+- **Implement proper** access controls
+
+### API Security
+- **Validate all inputs** before API calls
+- **Use HTTPS** for all communications
+- **Implement rate limiting** to prevent abuse
+- **Log security events** for monitoring
+
+## 🎯 BEST PRACTICES
+
+### Code Quality
+- **Use consistent naming conventions**
+- **Implement proper error handling**
+- **Add comprehensive logging**
+- **Follow platform-specific best practices**
+
+### User Experience
+- **Provide clear progress indicators**
+- **Show confirmation dialogs for critical actions**
+- **Offer helpful error messages**
+- **Maintain consistent interface across platforms**
+
+---
+
+**Core Scripts Rules extend Core Rules. Use them together! 🔧**

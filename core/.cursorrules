@@ -1,0 +1,64 @@
+# Core Rules - Project AI Manager
+# Rules for Core directory - automatically loaded by Cursor AI
+
+@import "../.cursorrules"
+
+## 🔧 CORE RULES
+
+### 1. Script Implementation
+- **Use only PowerShell (Windows) and Bash (Linux/macOS)**
+- **Implement comprehensive error handling**
+- **Add detailed logging** for all operations
+- **Test cross-platform compatibility**
+
+### 2. Script Structure
+- **All scripts** in appropriate subdirectories
+- **Common functions** in `core/scripts/windows/common/`
+- **Platform-specific** in `core/scripts/windows/` and `core/scripts/linux/`
+- **Templates** in `core/templates/`
+
+### 3. Common Functions
+- **`redmine-common.ps1`**: All Redmine functions
+- **`script-manager.ps1`**: Cross-platform script management
+- **Reusable utilities** for all projects
+
+### 4. Validation and Security
+- **Validate all inputs** before processing
+- **Implement proper error handling** with user-friendly messages
+- **Log all operations** for audit trail
+- **Never expose sensitive data** in logs
+
+## 📁 DIRECTORY ORGANIZATION
+
+### `core/rules/`
+- **Operational rules** for Cursor AI
+- **Workflow guidelines** for different platforms
+- **Best practices** for integration
+
+### `core/scripts/`
+- **Windows scripts** in `core/scripts/windows/`
+- **Linux/macOS scripts** in `core/scripts/linux/`
+- **Common functions** in `core/scripts/windows/common/`
+
+### `core/templates/`
+- **Project templates** for new projects
+- **Configuration templates** for different platforms
+- **Documentation templates** for consistency
+
+## 🚫 FORBIDDEN IN CORE
+
+### ❌ NEVER do:
+- Hardcode project-specific data
+- Implement business logic
+- Create scripts outside appropriate directories
+- Duplicate functionality between platforms
+
+### ✅ ALWAYS do:
+- Implement reusable functions
+- Add comprehensive error handling
+- Test cross-platform compatibility
+- Document all functions
+
+---
+
+**Core Rules extend main system rules. Use them together! 🔧**

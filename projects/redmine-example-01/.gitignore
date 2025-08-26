@@ -1,0 +1,14 @@
+# Generated data
+data/postgres/
+data/redmine-api/
+
+# Sensitive credentials
+config/credentials.env
+*.env
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp

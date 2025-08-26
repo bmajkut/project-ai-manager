@@ -1,0 +1,101 @@
+# Redmine Example 01 Rules - Project AI Manager
+# Project rules automatically loaded by Cursor AI
+
+@extend "../../.cursorrules"
+
+## 🎓 LEARNING PROJECT RULES
+
+### 1. Project Goal
+- **Learning project** for Redmine integration
+- **Demonstration** of Core/Projects architecture
+- **Safe environment** for experimentation
+- **Automatic data seeding**
+
+### 2. Project Structure
+- **`config/`**: Project configuration
+- **`docs/input/`**: Input documentation (system specification)
+- **`docs/output/`**: Output specifications (tasks.md, tasks.json)
+- **`data/`**: Project data (gitignore)
+
+### 3. Core Integration
+- **Use ONLY scripts** from `core/scripts/`
+- **Generate data** in JSON format
+- **No hardcoded content** in projects
+- **All operations** through Core scripts
+
+## 📁 PROJECT ORGANIZATION
+
+### Directory Structure
+```
+projects/redmine-example-01/
+├── config/                     # Project configuration
+│   ├── project-config.json    # AI Manager configuration
+│   └── project-rules.md       # Project-specific rules
+├── docs/                      # Documentation
+│   ├── input/                 # Input documentation
+│   │   └── project-specification.md  # System specification
+│   └── output/                # Output specifications
+│       ├── tasks.md           # Task list in Markdown
+│       └── tasks.json         # Task data in JSON
+├── data/                      # Project data (gitignore)
+│   ├── postgres/              # PostgreSQL database
+│   └── redmine-api/           # Redmine API data
+├── docker-compose.yml         # Docker configuration
+├── start-example.*            # Startup scripts
+└── README.md                  # Project documentation
+```
+
+### Project Configuration
+- **`project-config.json`**: Redmine and AI Manager configuration
+- **`project-rules.md`**: Project-specific rules
+- **No Redmine scripts** in projects
+- **Only configuration** and documentation
+
+## 🚫 FORBIDDEN IN PROJECT
+
+### ❌ NEVER do:
+- Placing Redmine scripts in project directories
+- Hardcoding task content in scripts
+- Duplicating Core functionality in projects
+- Creating custom Redmine scripts
+
+### ✅ ALWAYS do:
+- Use scripts from `core/scripts/`
+- Generate data in JSON format
+- Utilize common functions from Core
+- Follow Core rules
+
+## 🔄 PROJECT WORKFLOW
+
+### 1. Initialization
+- **Use templates** from `core/templates/`
+- **Configure** `project-config.json`
+- **Create directory** structure
+
+### 2. Requirements Analysis
+- **Place documentation** in `docs/input/`
+- **AI generates** specifications in `docs/output/`
+- **User approves** before implementation
+
+### 3. Implementation
+- **Use Core scripts** for environment validation
+- **Use Core scripts** for task creation
+- **Everything through** `core/scripts/`
+
+## 🎯 LEARNING PROJECT SPECIFICATION
+
+### Traffic Ticket Management System
+- **Web application** for controllers
+- **Mobile application** for controllers
+- **User management** system
+- **Integration** with payment systems
+
+### Project Versions
+- **v1.0.0**: System foundations
+- **v1.1.0**: Web application
+- **v1.2.0**: Mobile application
+- **v1.3.0**: Integrations and optimizations
+
+---
+
+**Redmine Example 01 rules ensure consistency of the learning project. Use Core scripts! 🎓**

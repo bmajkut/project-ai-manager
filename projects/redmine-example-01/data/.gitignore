@@ -1,0 +1,8 @@
+# Data directory - contains database files and API data
+# This directory should not be committed to version control
+
+# Redmine API data (cached responses, logs)
+redmine-api/
+
+# Keep the directory structure
+!.gitignore

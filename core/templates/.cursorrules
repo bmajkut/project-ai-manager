@@ -1,0 +1,70 @@
+# Core Templates Rules - Project AI Manager
+# Rules for Core templates - automatically loaded by Cursor AI
+
+@import "../../.cursorrules"
+
+## 📋 CORE TEMPLATES RULES
+
+### 1. Template Structure
+- **`project-config.json`**: Project configuration template
+- **`project-template.md`**: Project structure template
+- **All templates** in JSON or Markdown format
+- **Consistent naming** and formatting
+
+### 2. Template Content
+- **Clear instructions** for users
+- **Usage examples** and workflow
+- **Best practices** for different scenarios
+- **Error handling** and troubleshooting
+
+### 3. Template Updates
+- **Changes in templates** are automatically visible
+- **New templates** are immediately available
+- **Backward compatibility** for existing templates
+- **Versioning** of templates in changelog
+
+## 📁 TEMPLATES ORGANIZATION
+
+### `core/templates/project-config.json`
+- **Project configuration template** for new projects
+- **All required fields** with examples
+- **Redmine configuration** and AI Manager
+- **Project rules** and exceptions
+
+### `core/templates/project-template.md`
+- **Project structure template** for new projects
+- **Directory and file organization**
+- **Project documentation** and workflow
+- **Best practices** for projects
+
+## 🔄 AUTOMATIC SYNCHRONIZATION
+
+### How it works:
+1. **Templates are automatically loaded** by Cursor AI
+2. **Changes are immediately visible** without user intervention
+3. **AI learns new templates** automatically
+4. **Consistent operation** across entire system
+
+### Benefits:
+- **Zero configuration** - templates work immediately
+- **Automatic updates** - no AI restart needed
+- **Consistency** - all projects use same templates
+- **Flexibility** - easy to add new templates
+
+## 🚫 FORBIDDEN IN CORE TEMPLATES
+
+### ❌ NEVER do:
+- Hardcode project-specific data in templates
+- Implement business logic in templates
+- Create templates conflicting with main principles
+- Duplicate templates between different files
+
+### ✅ ALWAYS do:
+- Create clear and understandable templates
+- Add usage examples
+- Maintain consistency between templates
+- Document all changes
+
+---
+
+**Core Templates Rules manage all system templates. Use them wisely! 📋**

@@ -1,0 +1,201 @@
+# Cursor AI Rules - Project AI Manager
+# Main rules file automatically loaded by Cursor AI
+
+## 🏗️ SYSTEM ARCHITECTURE
+
+### Core/Projects Separation
+- **core/**: All scripts, rules, templates and tools
+- **projects/**: Only project-specific configuration and data
+- **No code duplication** between projects
+- **Single source of truth** for all operations
+
+### Directory Structure
+```
+project-ai-manager/
+├── core/                    # All scripts and rules
+│   ├── rules/             # Operational rules
+│   ├── scripts/           # PowerShell/Bash scripts
+│   └── templates/         # Project templates
+├── projects/               # User projects
+│   └── [project-name]/    # Configuration and data
+└── .cursorrules           # This file (automatic context)
+```
+
+## 🚫 CRITICAL RULE - CORE PROTECTION
+
+### ❌ NEVER EDIT CORE DIRECTORY
+- **core/ directory is PROTECTED** - never modify it
+- **All core functionality** must remain unchanged
+- **Only use core scripts** - don't create new ones
+- **Core is the foundation** - respect its integrity
+
+## 📋 OPERATIONAL RULES
+
+### 1. Separation of Responsibilities
+- **NEVER place business logic in projects**
+- **USE ONLY scripts from `core/scripts/`**
+- **All data must come from JSON/configuration files**
+
+### 2. Redmine Workflow
+1. **Input docs** → **AI Analysis** → **tasks.md + tasks.json**
+2. **Environment validation** → **Core scripts** → **Redmine**
+3. **Task creation** → **JSON data** → **Core scripts**
+
+### 3. Data Format
+- **`docs/output/tasks.json`**: Structured task data
+- **`project-config.json`**: Project configuration
+- **No hardcoded content** in scripts
+
+## 🔧 CORE SCRIPTS
+
+### Environment Validation
+```powershell
+.\core\scripts\windows\redmine\validate-environment.ps1 -ConfigFile project-config.json
+```
+
+### Task Creation
+```powershell
+.\core\scripts\windows\redmine\create-tasks.ps1 -ConfigFile project-config.json -TasksFile docs/output/tasks.json
+```
+
+### API Token Generation
+```powershell
+.\core\scripts\windows\redmine\generate-api-token.ps1 -ConfigFile redmine-config.json
+```
+
+### Common Functions
+- **`core/scripts/windows/common/redmine-common.ps1`**: All Redmine functions
+
+## ⚠️ FORBIDDEN ACTIONS
+
+### ❌ NEVER do:
+- Place Redmine scripts in project directories
+- Hardcode task content in scripts
+- Duplicate Core functionality in projects
+- Create custom Redmine scripts (use Core)
+
+### ✅ ALWAYS do:
+- Use scripts from `core/scripts/`
+- Generate data in JSON format
+- Use common functions from `redmine-common.ps1`
+- Follow rules from `core/rules/`
+
+## 🚀 AUTOMATIC LOADING
+
+### How it works:
+1. **Cursor AI starts** in this repository
+2. **Automatically loads** `.cursorrules`
+3. **Learns architecture** Core/Projects
+4. **Understands rules** of separation
+5. **Has access to all** Core scripts
+
+### Benefits:
+- **Zero configuration** - works immediately
+- **Full context** - knows all rules
+- **Automatic loading** - no user intervention needed
+- **Consistency** - always uses latest rules
+
+## 📝 USAGE EXAMPLE
+
+### When user wants to create Redmine tasks:
+
+1. **AI automatically knows** it must use Core scripts
+2. **Generates `tasks.json`** according to schema
+3. **Uses `validate-environment.ps1`** for validation
+4. **Uses `create-tasks.ps1`** for task creation
+5. **Everything according to rules** - zero hardcoding
+
+## 🔄 RULE UPDATES
+
+### Automatic synchronization:
+- **Changes in `core/rules/`** are automatically visible
+- **New Core scripts** are automatically available
+- **Context updates** are automatically loaded
+
+## 🔑 API TOKEN WORKFLOW
+
+### New Project Configuration Workflow:
+1. **User creates** `project-config.json` for new project
+2. **AI automatically detects** new project configuration
+3. **AI connects to Redmine** using admin credentials
+4. **AI generates API token** for the project
+5. **AI creates** `redmine-config.json` with:
+   - Project ID and details
+   - Available trackers, priorities, statuses
+   - Generated API token
+   - Current Redmine configuration state
+6. **AI updates** project configuration automatically
+7. **Project is ready** for Core script usage
+
+### Required Files:
+- **`project-config.json`**: Basic project configuration
+- **`redmine-config.json`**: Redmine-specific configuration (auto-generated)
+- **Admin credentials**: For initial API token generation
+
+### Benefits:
+- **No manual seeding** required
+- **Automatic configuration** discovery
+- **Real-time Redmine state** synchronization
+- **Ready-to-use** Core scripts
+
+## 🎯 WORKFLOW PHASES
+
+### Phase 1: Project Initialization
+1. **Analyze user requirements**
+2. **Create project configuration file**
+3. **Set up project directory structure**
+4. **Apply project-specific rules**
+
+### Phase 2: Requirements Analysis
+1. **Process technical specifications**
+2. **Generate project elaboration document**
+3. **Wait for user approval**
+
+### Phase 3: Task Planning
+1. **Create detailed task list with versions in Markdown** (docs/output/tasks.md)
+2. **Generate task data in JSON format** (docs/output/tasks.json)
+3. **Get final user approval**
+
+### Phase 4: Redmine Environment Validation
+1. **Use Core scripts to validate Redmine environment**
+2. **Check for missing core elements** (statuses, trackers, priorities)
+3. **Generate user action list if manual setup required**
+4. **Wait for user to complete manual setup**
+
+### Phase 5: Platform Synchronization
+1. **Use Core scripts to create tasks from JSON data**
+2. **Execute API operations via Core utilities**
+3. **Verify successful synchronization**
+4. **Update project documentation and changelog**
+
+## 🔒 SECURITY AND VALIDATION
+
+### Security Rules
+- **Never hardcode** API keys or passwords
+- **Use environment variables** or secure configuration files
+- **Log credential usage** but never log actual values
+- **Implement proper** access controls
+
+### Validation Rules
+- **Verify JSON schema** compliance
+- **Check required fields** presence
+- **Validate data types** and formats
+- **Confirm Redmine connectivity**
+
+## 📊 LOGGING AND DOCUMENTATION
+
+### Operation Logging
+- **Log all API calls** with timestamps
+- **Record user decisions** and approvals
+- **Track rule exceptions** and overrides
+- **Maintain audit trail** for compliance
+
+### Documentation Updates
+- **Update project changelog** automatically
+- **Maintain task description** history
+- **Document rule exceptions**
+- **Track configuration changes**
+
+---
+
+**This file is automatically loaded by Cursor AI. No user intervention required! 🚀**

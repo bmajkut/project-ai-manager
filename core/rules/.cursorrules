@@ -1,0 +1,132 @@
+# Core Rules Management - Project AI Manager
+# Rules for managing Core rules - automatically loaded by Cursor AI
+
+@import "../../.cursorrules"
+
+## 📋 CORE RULES MANAGEMENT RULES
+
+### 1. Rules Structure
+- **`cursor-ai-rules.md`**: Main operational rules for Cursor AI
+- **`redmine-integration-rules.md`**: Specific Redmine integration rules
+- **All rules** in Markdown format
+- **Consistent naming** and formatting
+
+### 2. Rules Updates
+- **Changes in rules** are automatically visible
+- **New rules** are immediately available
+- **Backward compatibility** for existing rules
+- **Versioning** of rules in changelog
+
+### 3. Rules Content
+- **Clear instructions** for Cursor AI
+- **Usage examples** and workflow
+- **Best practices** for different scenarios
+- **Error handling** and troubleshooting
+
+## 📁 RULES ORGANIZATION
+
+### `core/rules/cursor-ai-rules.md`
+- **Main operational rules** for Cursor AI
+- **Workflow phases** and project stages
+- **Per-project rules** and exceptions
+- **Configuration requirements**
+
+### `core/rules/redmine-integration-rules.md`
+- **Redmine integration rules**
+- **Workflow for task creation**
+- **Required Core scripts**
+- **Data flow architecture**
+
+## 🔄 AUTOMATIC SYNCHRONIZATION
+
+### How it works:
+1. **Rules are automatically loaded** by Cursor AI
+2. **Changes are immediately visible** without user intervention
+3. **AI learns new rules** automatically
+4. **Consistent operation** across entire system
+
+### Benefits:
+- **Zero configuration** - rules work immediately
+- **Automatic updates** - no AI restart needed
+- **Consistency** - all projects use same rules
+- **Flexibility** - easy to add new rules
+
+## 🚫 FORBIDDEN IN CORE RULES
+
+### ❌ NEVER do:
+- Hardcode project-specific data in rules
+- Implement business logic in rules
+- Create rules conflicting with main principles
+- Duplicate rules between different files
+
+### ✅ ALWAYS do:
+- Create clear and understandable rules
+- Add usage examples
+- Maintain consistency between rules
+- Document all changes
+
+## 🎯 PER-PROJECT RULES AND EXCEPTIONS
+
+### Rule Hierarchy
+1. **Global Rules**: Apply to all projects by default
+2. **Project Rules**: Override global rules for specific projects
+3. **Learning Mode**: Special permissions for practice projects
+
+### Exception Types
+- **`allow_issue_deletion`**: Override deletion prohibition
+- **`allow_full_cleanup`**: Allow complete project reset
+- **`learning_mode`**: Enable experimental features
+- **`special_permissions`**: Custom rule overrides
+
+### Rule Detection
+- Check `project-config.json` for `project_rules` section
+- Look for `project-rules.md` in project config directory
+- Apply most restrictive rules by default
+- Log all rule exceptions for audit
+
+## 🔒 CONFIGURATION REQUIREMENTS
+
+### Project Configuration
+- **Platform detection settings**
+- **API credentials and endpoints**
+- **Project identification**
+- **Language preferences**
+- **Rule exceptions and overrides**
+
+### System Configuration
+- **Target platforms (Windows, Linux, macOS)**
+- **Automatic OS detection**
+- **Fallback platform settings**
+- **Script manager preferences**
+
+## ⚠️ ERROR HANDLING
+
+### API Errors
+- **Retry with exponential backoff**
+- **Log detailed error information**
+- **Provide user-friendly error messages**
+- **Suggest recovery actions**
+
+### Validation Errors
+- **Stop operation immediately**
+- **Show specific validation failures**
+- **Guide user to fix issues**
+- **Maintain data integrity**
+
+## 📊 LOGGING AND DOCUMENTATION
+
+### Operation Logging
+- **Log all API calls** with timestamps
+- **Record user decisions** and approvals
+- **Track rule exceptions** and overrides
+- **Maintain audit trail** for compliance
+
+### Documentation Updates
+- **Update project changelog** automatically
+- **Maintain task description** history
+- **Document rule exceptions**
+- **Track configuration changes**
+
+---
+
+**Core Rules Management manages all system rules. Use them wisely! 📋**

@@ -1,0 +1,77 @@
+{
+    "project_info": {
+        "name": "Redmine Example 01 - Redmine Learning Project",
+        "description": "Demonstration project for learning Redmine AI Assistant",
+        "language": "en",
+        "created_date": "2024-08-24",
+        "status": "learning",
+        "project_type": "redmine-example"
+    },
+    "redmine": {
+        "url": "http://localhost:3000",
+        "api_token": "YOUR_API_TOKEN_HERE",
+        "project": {
+            "id": 6,
+            "name": "redmine-example",
+            "identifier": "redmine-example"
+        }
+    },
+    "trackers": [
+        {
+            "id": 1,
+            "name": "Task"
+        },
+        {
+            "id": 2,
+            "name": "Bug"
+        },
+        {
+            "id": 3,
+            "name": "Feature"
+        }
+    ],
+    "priorities": [
+        {
+            "id": 1,
+            "name": "Low"
+        },
+        {
+            "id": 2,
+            "name": "Normal"
+        },
+        {
+            "id": 3,
+            "name": "High"
+        },
+        {
+            "id": 4,
+            "name": "Urgent"
+        }
+    ],
+    "statuses": [
+        {
+            "id": 1,
+            "name": "New"
+        },
+        {
+            "id": 2,
+            "name": "In Progress"
+        },
+        {
+            "id": 3,
+            "name": "Resolved"
+        },
+        {
+            "id": 4,
+            "name": "Closed"
+        }
+    ],
+    "project_rules": {
+        "allow_issue_deletion": true,
+        "allow_full_cleanup": true,
+        "learning_mode": true,
+        "max_issues_per_project": 100,
+        "auto_cleanup_after_days": 7
+    },
+    "last_updated": "2025-01-27T12:00:00Z"
+}
